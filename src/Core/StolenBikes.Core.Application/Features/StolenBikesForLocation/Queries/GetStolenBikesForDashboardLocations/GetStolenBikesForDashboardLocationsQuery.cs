@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 using AutoMapper;
 
+using EnsureThat;
+
 using MediatR;
 
 using Microsoft.Extensions.Options;
@@ -29,6 +31,9 @@ namespace StolenBikes.Core.Application.Features.StolenBikesForLocation.Queries.G
         private readonly string[] _futureLocations;
         public GetStolenBikesForDashboardLocationsQueryHandler(IGetStolenBikesForLocationService getStolenBikesForLocationService, IMapper mapper, IOptions<DashboardLocationsSettings> locationsStatisticsSettings)
         {
+            EnsureArg.IsNotNull(getStolenBikesForLocationService, nameof(getStolenBikesForLocationService));
+            EnsureArg.IsNotNull(mapper, nameof(mapper));
+
             _getStolenBikesForLocationService = getStolenBikesForLocationService;
             _mapper = mapper;
 
@@ -90,7 +95,8 @@ namespace StolenBikes.Core.Application.Features.StolenBikesForLocation.Queries.G
                 stolenBikesInLocations.Add(_mapper.Map<GetStolenBikesForLocationViewModel>(apiResponseContent));
             }
 
-            return stolenBikesInLocations;
+            var sortedLocations = stolenBikesInLocations.OrderBy(l => l.StolenBikesCount);
+            return sortedLocations.ToList();
         }
     }
 }

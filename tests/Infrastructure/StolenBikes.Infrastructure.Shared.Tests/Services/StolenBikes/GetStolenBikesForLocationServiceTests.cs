@@ -1,5 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 using FakeItEasy;
@@ -8,32 +10,35 @@ using FluentAssertions;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using Newtonsoft.Json;
+
+using RestEase;
+
 using StolenBikes.Core.Application.DTOs;
-using StolenBikes.Core.Domain.Entities;
 using StolenBikes.Infrastructure.Shared.Services.StolenBikes;
-using StolenBikes.Infrastructure.Shared.Services.StolenBikes.Helpers;
+using StolenBikes.Infrastructure.Shared.Services.StolenBikes.Clients;
 
 namespace StolenBikes.Infrastructure.Shared.Tests.Services.StolenBikes
 {
     [TestClass]
     public class GetStolenBikesForLocationServiceTests
     {
-        private IStolenBikesDataHelper _stolenBikesDataHelper;
+        private IStolenBikesApi _stolenBikesApi;
         private GetStolenBikesForLocationService _stolenBikesForLocationService;
 
         [TestInitialize]
         public void Initialize()
         {
-            _stolenBikesDataHelper = A.Fake<IStolenBikesDataHelper>();
+            _stolenBikesApi = A.Fake<IStolenBikesApi>();
 
-            _stolenBikesForLocationService = new GetStolenBikesForLocationService(_stolenBikesDataHelper);
+            _stolenBikesForLocationService = new GetStolenBikesForLocationService(_stolenBikesApi);
         }
 
         [TestMethod]
-        public void Constructor_WithNullForStolenBikesDataHelper_ShouldThrowArgumentNullException()
+        public void Constructor_WithNullForStolenBikesApi_ShouldThrowArgumentNullException()
         {
             // Arrange
-            const string expectedNameOfParam = "stolenBikesDataHelper";
+            const string expectedNameOfParam = "stolenBikesApi1";
 
             // Act
             Action act = () => _ = new GetStolenBikesForLocationService(null);
@@ -81,26 +86,25 @@ namespace StolenBikes.Infrastructure.Shared.Tests.Services.StolenBikes
             // Arrange
             var proximity = "Athens";
             var proximitySquare = 2;
-            var stolenBikesFromLocation = new List<StolenBikeIncident>()
-            {
-                new StolenBikeIncident
-                {
-                    Id = 1
-                },
-                new StolenBikeIncident
-                {
-                    Id = 2
-                }
-            };
 
-            A.CallTo(() => _stolenBikesDataHelper.FetchAllStolenBikes(proximity, proximitySquare))
-                .Returns(stolenBikesFromLocation);
+            const int stolenBikesCount = 76;
+
+            var testDataFilePath = Directory.GetCurrentDirectory() + "/TestData/ApiResponse.json";
+            var jsonData = await File.ReadAllTextAsync(testDataFilePath);
+            var apiResponseContent = JsonConvert.DeserializeObject<StolenBikesApiResponse>(jsonData);
+            var apiResponse = new Response<StolenBikesApiResponse>(null, new HttpResponseMessage(HttpStatusCode.OK),
+                () => apiResponseContent);
+            apiResponse.ResponseMessage.Headers.Add("total", stolenBikesCount.ToString());
+            //A.CallTo() apiResponse.ResponseMessage.Headers
+
+            A.CallTo(() => _stolenBikesApi.GetStolenBikesForLocationAsync(1, 1, proximity, proximitySquare))
+                .Returns(apiResponse);
 
             var expected = new StolenBikesForLocationDto
             {
                 Proximity = proximity,
                 ProximitySquare = proximitySquare,
-                StolenBikesCount = stolenBikesFromLocation.Count
+                StolenBikesCount = stolenBikesCount
             };
 
             // Act

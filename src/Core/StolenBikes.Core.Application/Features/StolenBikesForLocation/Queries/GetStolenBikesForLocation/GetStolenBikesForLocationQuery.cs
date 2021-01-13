@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 
 using AutoMapper;
 
+using EnsureThat;
+
 using MediatR;
 
 using StolenBikes.Core.Application.Interfaces.Services;
@@ -22,6 +24,9 @@ namespace StolenBikes.Core.Application.Features.StolenBikesForLocation.Queries.G
         private readonly IMapper _mapper;
         public GetGetStolenBikesForLocationQueryHandler(IGetStolenBikesForLocationService getStolenBikesForLocationService, IMapper mapper)
         {
+            EnsureArg.IsNotNull(getStolenBikesForLocationService, nameof(getStolenBikesForLocationService));
+            EnsureArg.IsNotNull(mapper, nameof(mapper));
+
             _getStolenBikesForLocationService = getStolenBikesForLocationService;
             _mapper = mapper;
         }

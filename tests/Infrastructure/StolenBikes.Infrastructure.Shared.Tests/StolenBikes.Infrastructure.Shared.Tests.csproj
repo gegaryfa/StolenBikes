@@ -22,4 +22,10 @@
     <ProjectReference Include="..\..\..\src\Infrastructure\StolenBikes.Infrastructure.Shared\StolenBikes.Infrastructure.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestData\ApiResponse.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
