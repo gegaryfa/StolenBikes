@@ -1,0 +1,52 @@
+﻿@model StolenBikes.Core.Application.Features.StolenBikesForLocation.Queries.GetStolenBikesForLocation.GetStolenBikesForLocationViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<form action="/home/CustomLocation" method="post">
+    <label for="Location">Set the location you want to search for</label>
+    <input type="text" name="Location" />
+    <br>
+    <label for="ProximitySquare">Set the proximity Square</label>
+    <input type="text" name="ProximitySquare" />
+
+    <input type="submit" name="submit" />
+</form>
+
+
+@if (Model is not null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                Current cities
+                <th>
+                    City
+                </th>
+                <th>
+                    Proximity Square
+                </th>
+                <th>
+                    #Stolen Bikes
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td>
+                    @Model.Proximity
+                </td>
+                <td>
+                    @Model.ProximitySquare
+                </td>
+                <td>
+                    @Model.StolenBikesCount
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+}

@@ -1,0 +1,86 @@
+﻿@model StolenBikes.WebMvc.ViewModels.GetStolenBikesForAllCitiesViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<form action="/home/index" method="post">
+    <label for="ProximitySquare">Change the proximity Square</label>
+    <input type="text" name="ProximitySquare" />
+
+    <input type="submit" name="submit" />
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            Current cities
+            <th>
+                City
+            </th>
+            <th>
+                Proximity Square
+            </th>
+            <th>
+                #Stolen Bikes
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var city in Model.StolenBikesInCurrentCities)
+        {
+            <tr>
+                <td>
+                    @city.Proximity
+                </td>
+                <td>
+                    @city.ProximitySquare
+                </td>
+                <td>
+                    @city.StolenBikesCount
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            Future cities
+            <th>
+                City
+            </th>
+            <th>
+                Proximity Square
+            </th>
+            <th>
+                #Stolen Bikes
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var city in Model.StolenBikesInFutureCities)
+        {
+            <tr>
+                <td>
+                    @city.Proximity
+                </td>
+                <td>
+                    @city.ProximitySquare
+                </td>
+                <td>
+                    @city.StolenBikesCount
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<p>Need a custom location and proximity square? We 've got you covered :) . <a asp-action="CustomLocation">Click here</a></p>
