@@ -38,7 +38,7 @@ namespace StolenBikes.Infrastructure.Shared.Tests.Services.StolenBikes
         public void Constructor_WithNullForStolenBikesApi_ShouldThrowArgumentNullException()
         {
             // Arrange
-            const string expectedNameOfParam = "stolenBikesApi1";
+            const string expectedNameOfParam = "stolenBikesApi";
 
             // Act
             Action act = () => _ = new GetStolenBikesForLocationService(null);
