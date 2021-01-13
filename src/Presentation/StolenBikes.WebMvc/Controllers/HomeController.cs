@@ -12,6 +12,8 @@ namespace StolenBikes.WebMvc.Controllers
 {
     public class HomeController : BaseController
     {
+        private const int DefaultProximitySquare = 10;
+
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -21,10 +23,9 @@ namespace StolenBikes.WebMvc.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var defaultProximitySquare = 10;
             var viewModel = await Mediator.Send(new GetStolenBikesForDashboardLocationsQuery()
             {
-                ProximitySquare = defaultProximitySquare
+                ProximitySquare = DefaultProximitySquare
             });
 
             return View(viewModel);
@@ -40,8 +41,6 @@ namespace StolenBikes.WebMvc.Controllers
 
             return View(viewModel);
         }
-
-
 
         public IActionResult CustomLocation()
         {

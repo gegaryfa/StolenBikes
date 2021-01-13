@@ -2,11 +2,8 @@
 @url = https://bikewise.org:443/api/v2
 @page = 1
 @per_page = 2
-@proximity = Amsterdam 
-@proximity_square = 10
+@proximity = Amsterdam
+@proximity_square = 100
 
 ### Get nearest locations
 GET {{url}}/incidents?page={{page}}&per_page={{per_page}}&proximity={{proximity}}&proximity_square={{proximity_square}}
-
-### Get all
-GET http://localhost:57712/api/v1/Product
