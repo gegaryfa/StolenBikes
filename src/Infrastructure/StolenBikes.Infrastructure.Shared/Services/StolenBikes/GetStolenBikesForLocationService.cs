@@ -1,11 +1,9 @@
-﻿
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-using AutoMapper;
+using EnsureThat;
 
+using StolenBikes.Core.Application.DTOs;
 using StolenBikes.Core.Application.Interfaces.Services;
-using StolenBikes.Core.Domain.Entities;
 using StolenBikes.Infrastructure.Shared.Services.StolenBikes.Helpers;
 
 namespace StolenBikes.Infrastructure.Shared.Services.StolenBikes
@@ -13,19 +11,28 @@ namespace StolenBikes.Infrastructure.Shared.Services.StolenBikes
     public class GetStolenBikesForLocationService : IGetStolenBikesForLocationService
     {
         private readonly IStolenBikesDataHelper _stolenBikesDataHelper;
-        private readonly IMapper _mapper;
 
-        public GetStolenBikesForLocationService(IStolenBikesDataHelper stolenBikesDataHelper, IMapper mapper)
+        public GetStolenBikesForLocationService(IStolenBikesDataHelper stolenBikesDataHelper)
         {
+            EnsureArg.IsNotNull(stolenBikesDataHelper, nameof(stolenBikesDataHelper));
+
             _stolenBikesDataHelper = stolenBikesDataHelper;
-            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<StolenBikeIncident>> GetStolenBikesForLocation(string proximity, int proximitySquare)
+        public async Task<StolenBikesForLocationDto> GetStolenBikesForLocation(string proximity, int proximitySquare)
         {
+            EnsureArg.IsNotNull(proximity, nameof(proximity));
+            EnsureArg.IsGt(proximitySquare, 0);
+
             var allStolenBikesInLocation = await _stolenBikesDataHelper.FetchAllStolenBikes(proximity, proximitySquare);
 
-            var result = _mapper.Map<IEnumerable<StolenBikeIncident>>(allStolenBikesInLocation);
+            var result = new StolenBikesForLocationDto
+            {
+                Proximity = proximity,
+                ProximitySquare = proximitySquare,
+                StolenBikesCount = allStolenBikesInLocation.Count
+            };
+
             return result;
         }
     }

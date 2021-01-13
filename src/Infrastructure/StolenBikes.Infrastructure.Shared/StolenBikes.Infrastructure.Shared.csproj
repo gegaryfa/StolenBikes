@@ -9,6 +9,7 @@
     <ProjectReference Include="..\..\Core\StolenBikes.Core.Application\StolenBikes.Core.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Ensure.That" Version="9.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
     <PackageReference Include="RestEase" Version="1.5.2" />
   </ItemGroup>

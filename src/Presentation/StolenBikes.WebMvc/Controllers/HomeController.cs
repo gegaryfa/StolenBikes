@@ -4,27 +4,28 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
+using StolenBikes.Core.Application.Features.StolenBikesForLocation.Queries.GetStolenBikesForDashboardLocations;
+using StolenBikes.Core.Application.Features.StolenBikesForLocation.Queries.GetStolenBikesForLocation;
 using StolenBikes.WebMvc.Models;
-using StolenBikes.WebMvc.Services;
-using StolenBikes.WebMvc.ViewModels;
 
 namespace StolenBikes.WebMvc.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IStolenBikesStatisticsService _stolenBikesStatisticsService;
 
-        public HomeController(ILogger<HomeController> logger, IStolenBikesStatisticsService stolenBikesStatisticsService)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _stolenBikesStatisticsService = stolenBikesStatisticsService;
         }
 
         public async Task<IActionResult> Index()
         {
             var defaultProximitySquare = 10;
-            var viewModel = await GetStolenBikesForAllCities(defaultProximitySquare);
+            var viewModel = await Mediator.Send(new GetStolenBikesForDashboardLocationsQuery()
+            {
+                ProximitySquare = defaultProximitySquare
+            });
 
             return View(viewModel);
         }
@@ -32,24 +33,14 @@ namespace StolenBikes.WebMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(int proximitySquare)
         {
-            var viewModel = await GetStolenBikesForAllCities(proximitySquare);
+            var viewModel = await Mediator.Send(new GetStolenBikesForDashboardLocationsQuery()
+            {
+                ProximitySquare = proximitySquare
+            });
 
             return View(viewModel);
         }
 
-        private async Task<GetStolenBikesForAllCitiesViewModel> GetStolenBikesForAllCities(int proximitySquare)
-        {
-            var currentCitiesStolenBikes =
-                _stolenBikesStatisticsService.GetStolenBikesStatisticsForCurrentCities(proximitySquare);
-
-            var futureCitiesStolenBikes =
-                _stolenBikesStatisticsService.GetStolenBikesStatisticsForFutureCities(proximitySquare);
-
-            var viewModel = new GetStolenBikesForAllCitiesViewModel();
-            viewModel.StolenBikesInCurrentCities.AddRange(await currentCitiesStolenBikes);
-            viewModel.StolenBikesInFutureCities.AddRange(await futureCitiesStolenBikes);
-            return viewModel;
-        }
 
 
         public IActionResult CustomLocation()
@@ -60,7 +51,11 @@ namespace StolenBikes.WebMvc.Controllers
         [HttpPost]
         public async Task<IActionResult> CustomLocation(string location, int proximitySquare)
         {
-            var viewModel = await _stolenBikesStatisticsService.GetStolenBikesStatisticsForLocation(location, proximitySquare);
+            var viewModel = await Mediator.Send(new GetStolenBikesForLocationQuery
+            {
+                Proximity = location,
+                ProximitySquare = proximitySquare
+            });
 
             return View(viewModel);
         }

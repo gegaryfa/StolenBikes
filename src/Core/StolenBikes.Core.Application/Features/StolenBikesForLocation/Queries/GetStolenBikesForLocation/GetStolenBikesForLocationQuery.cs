@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 using AutoMapper;
@@ -33,14 +32,7 @@ namespace StolenBikes.Core.Application.Features.StolenBikesForLocation.Queries.G
 
             var stolenBikesForLocation = await _getStolenBikesForLocationService.GetStolenBikesForLocation(request.Proximity, request.ProximitySquare);
 
-            var response = new GetStolenBikesForLocationViewModel
-            {
-                Proximity = query.Proximity,
-                ProximitySquare = query.ProximitySquare,
-                StolenBikesCount = stolenBikesForLocation.Count()
-            };
-
-            return response;
+            return _mapper.Map<GetStolenBikesForLocationViewModel>(stolenBikesForLocation);
         }
     }
 }

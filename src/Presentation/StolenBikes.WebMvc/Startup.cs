@@ -22,9 +22,8 @@ namespace StolenBikes.WebMvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplicationLayer();
+            services.AddApplicationLayer(Configuration);
             services.AddSharedInfrastructure(Configuration);
-            services.PresentationLayer(Configuration);
 
             services.AddControllersWithViews();
             services.AddApplicationInsightsTelemetry();

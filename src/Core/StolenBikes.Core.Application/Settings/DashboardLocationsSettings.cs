@@ -1,6 +1,6 @@
-﻿namespace StolenBikes.WebMvc.Settings
+﻿namespace StolenBikes.Core.Application.Settings
 {
-    public class LocationsStatisticsSettings
+    public class DashboardLocationsSettings
     {
         public string[] CurrentLocations { get; set; }
         public string[] FutureLocations { get; set; }

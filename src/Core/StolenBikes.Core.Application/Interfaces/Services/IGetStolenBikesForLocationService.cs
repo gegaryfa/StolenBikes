@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-using StolenBikes.Core.Domain.Entities;
+using StolenBikes.Core.Application.DTOs;
 
 namespace StolenBikes.Core.Application.Interfaces.Services
 {
     public interface IGetStolenBikesForLocationService
     {
-        Task<IEnumerable<StolenBikeIncident>> GetStolenBikesForLocation(string proximity, int proximitySquare);
+        Task<StolenBikesForLocationDto> GetStolenBikesForLocation(string proximity, int proximitySquare);
     }
 }

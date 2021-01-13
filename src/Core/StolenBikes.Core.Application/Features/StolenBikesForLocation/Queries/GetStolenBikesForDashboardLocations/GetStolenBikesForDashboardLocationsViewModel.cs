@@ -1,13 +1,12 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using StolenBikes.Core.Application.Features.StolenBikesForLocation.Queries.GetStolenBikesForLocation;
 
-namespace StolenBikes.WebMvc.ViewModels
+namespace StolenBikes.Core.Application.Features.StolenBikesForLocation.Queries.GetStolenBikesForDashboardLocations
 {
-    public class GetStolenBikesForAllCitiesViewModel
+    public class GetStolenBikesForDashboardLocationsViewModel
     {
-        public GetStolenBikesForAllCitiesViewModel()
+        public GetStolenBikesForDashboardLocationsViewModel()
         {
             StolenBikesInCurrentCities = new List<GetStolenBikesForLocationViewModel>();
             StolenBikesInFutureCities = new List<GetStolenBikesForLocationViewModel>();

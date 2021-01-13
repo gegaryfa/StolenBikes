@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 
+using StolenBikes.Core.Application.DTOs;
+using StolenBikes.Core.Application.Features.StolenBikesForLocation.Queries.GetStolenBikesForDashboardLocations;
 using StolenBikes.Core.Application.Features.StolenBikesForLocation.Queries.GetStolenBikesForLocation;
 using StolenBikes.Core.Domain.Entities;
 
@@ -10,7 +12,10 @@ namespace StolenBikes.Core.Application.Mappings
         public GeneralProfile()
         {
             CreateMap<StolenBikeIncident, GetStolenBikesForLocationViewModel>().ReverseMap();
+            CreateMap<StolenBikesForLocationDto, GetStolenBikesForLocationViewModel>().ReverseMap();
+
             CreateMap<GetStolenBikesForLocationQuery, GetStolenBikesForLocationParameter>();
+            CreateMap<GetStolenBikesForDashboardLocationsQuery, GetStolenBikesForDashboardLocationsParameters>();
         }
     }
 }
